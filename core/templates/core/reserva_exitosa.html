@@ -1,0 +1,39 @@
+
+{% extends 'core/base.html' %}
+{% block contenido %} 
+{% load custom_tags %}
+
+<div>
+    <h1 class="text-center">Lista de Reservas</h1>
+</div>
+
+<div class="container mt-4">
+    
+    <ul class="list-group">
+        {% for reserva in reservas %}
+        <li class="list-group-item">
+            <p>Reserva para Medico {{ reserva.medico }} el {{ reserva.fecha }} a las {{ reserva.hora }} Valor ${{reserva.medico.valor_consulta}}</p>
+            {% if reserva.estado %}
+            <p style="color: green;"> Pagado</p>
+            {% else %}
+            <p style="color: red;"> No pagado</p>
+            {% endif %}
+            <div class="d-flex justify-content-between">
+                <div>
+                    <a class="btn btn-primary btn-sm" href="{% url 'editar_reserva' reserva.id %}">Editar</a>
+                    <a class="btn btn-danger btn-sm" href="{% url 'eliminar_reserva' reserva.id %}">Eliminar</a>
+                </div>
+                {% if user.is_authenticated and user|in_group:'Secretaria' %}
+                <a class="btn btn-success btn-sm" href="{% url 'realizar_pago' reserva.id %}">Realizar Pago</a>
+                {% endif %}
+                
+            </div>
+        </li>
+        {% endfor %}
+        <div>
+        <a class="btn btn-secondary mt-3" href="{% url 'base' %}">Atrás</a>
+    </div>
+    </ul>
+    
+</div>
+{% endblock %}

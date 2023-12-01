@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+{% block contenido %} 
+
+
+<div style="background-color: #8bc34a; padding: 20px;">
+    <h1>Editar Reserva</h1>
+    <form method="post" style="max-width: 400px; margin: 0 auto;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Enviar" style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px;">
+    </form>
+</div>
+
+  
+{% endblock %}

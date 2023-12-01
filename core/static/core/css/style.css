@@ -1,0 +1,57 @@
+
+body{
+
+    background-image:linear-gradient( to right ,#0b0b0b,#16ef0bc0 ,#7cff01,#0b0b0b) ; 
+}
+
+nav{
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-image: linear-gradient(to right, #1edb4ac0, #0b0b0b);
+    z-index: 1000;}
+
+
+table{
+
+    background-color: aliceblue;
+}
+.h2{
+
+    text-align: center;
+}
+.p2{
+    text-align: center;
+}
+.imagen{
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+.carousel {
+    width: 550px;
+    height: 480px;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    text-align: justify;
+
+}
+.texto{
+
+    margin-left: 100px;
+
+}
+.p{
+
+    display: flex;
+    justify-content: center;
+}
+.boton{
+    text-align: right;
+    justify-content: right;
+}

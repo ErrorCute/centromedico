@@ -1,0 +1,52 @@
+
+
+{% extends 'core/base.html' %}
+ 
+
+  {% load static %} 
+ 
+  
+
+  
+  {% block contenido %} 
+
+   <!--  LOGIN  -->
+   
+
+     
+    <div class="container" style="background-color:rgba(0, 153, 102);" >
+
+        <h1 class="" style="color: aliceblue;">
+          registro
+        </h1>
+    
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="container" style="background-color:rgba(0, 153, 102);" >
+      <br>
+      <br>
+      <br>
+      <br>
+        <form action=""   method="post">
+            {% csrf_token %}
+            <table>
+
+
+              {{ form.as_table }}
+              
+            </table>
+            
+            <input type="submit" class="btn btn-primary"  value="Registrarse">
+            <input type="reset" class="btn btn-danger"  value="limpiar">
+
+    
+          
+        </form>
+        <br>
+      </div>
+    
+    </div>
+  
+{% endblock %}
