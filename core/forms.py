@@ -66,3 +66,8 @@ class PagarReserva (forms.ModelForm):
         fields = ["estado"]
         
         
+class FormularioMedio(forms.ModelForm):
+    
+    class Meta:
+        model = Medico
+        exclude=["user"]

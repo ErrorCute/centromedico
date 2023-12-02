@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import  base,form,login,reserva,reserva_exitosa,editar_reserva,eliminar_reserva,realizar_pago
+from .views import  base,form,login,reserva,reserva_exitosa,editar_reserva,eliminar_reserva,realizar_pago,registro_medico
 
 urlpatterns=[
   
@@ -11,5 +11,5 @@ urlpatterns=[
     path('reserva/<int:reserva_id>/editar/', editar_reserva, name='editar_reserva'),
     path('reserva/<int:reserva_id>/eliminar/', eliminar_reserva, name='eliminar_reserva'),
     path('reserva/<int:reserva_id>/realizar_pago/', realizar_pago, name='realizar_pago'),
-
+    path('registro_medico/', registro_medico, name='registro_medico')
 ]

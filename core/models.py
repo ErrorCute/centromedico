@@ -9,10 +9,7 @@ from django.urls import reverse_lazy
 class Secretaria(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rut = models.CharField(max_length=50)
-    nombre = models.CharField(max_length=100)
     telefono = models.IntegerField()
-    correo = models.EmailField()
-    
     def __str__(self):
         return self.user.username
 
@@ -20,23 +17,19 @@ class Secretaria(models.Model):
 class Medico(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rut = models.CharField(max_length=50)
-    nombre = models.CharField(max_length=100)
     especialidad = models.CharField(max_length=100)
     telefono = models.IntegerField()
-    correo = models.EmailField()
     box=models.IntegerField(default=1)
     valor_consulta =models.IntegerField()
     
     
     def __str__(self):
-        return f'Nombre: {self.nombre} Especialidad: {self.especialidad} Box: {self.box}'
+        return f' Especialidad: {self.especialidad} Box: {self.box}'
 
 class Paciente(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rut = models.CharField(max_length=50)
-    nombre = models.CharField(max_length=100)
     telefono = models.IntegerField()
-    correo = models.EmailField()
     edad = models.IntegerField()
     
     def __str__(self):

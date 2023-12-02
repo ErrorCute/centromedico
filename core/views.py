@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .forms import UsuarioUserForm,ReservaForm,PagarReserva
+from .forms import UsuarioUserForm,ReservaForm,PagarReserva,FormularioMedio
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib.auth import authenticate,login
 from django.shortcuts import get_object_or_404
@@ -17,7 +17,12 @@ def form(request):
             user = authenticate(username=usuario.username, password=formulario.cleaned_data["password1"])
             if user is not None:
                 login(request, user)
-                return redirect('base')  # Redirigir a la página deseada después de guardar el usuario
+
+                # Redirigir al formulario específico según el grupo del usuario
+                if user.groups.filter(name='Medico').exists():
+                    return redirect('registro_medico')
+                else:
+                    return redirect('base')  # Otra página si no es médico
 
     else:
         formulario = UsuarioUserForm()
@@ -111,5 +116,15 @@ def realizar_pago(request, reserva_id):
     # Renderizar la plantilla con el formulario apropiado
     return render(request, 'core/realizar_pago.html', {'form': form,'user': request.user})
 
-def formulario_con_calendario(request):
-    return render(request, 'formulario_con_calendario.html')
+def registro_medico(request):
+    if request.method == 'POST':
+        form = FormularioMedio(request.POST)
+        if form.is_valid():
+            medico = form.save(commit=False)
+            medico.user = request.user
+            medico.save()
+            return redirect('base')  # Redirige a la página de éxito o a donde sea necesario
+    else:
+        form = FormularioMedio()
+    
+    return render(request, 'core/registro_medico.html', {'form': form})
