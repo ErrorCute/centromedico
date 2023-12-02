@@ -3,12 +3,11 @@ from .models import Medico,Paciente,Secretaria,Reserva
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
+from django.contrib.auth.models import Group
 
 
 
 class UsuarioUserForm(UserCreationForm):
-    # Campo adicional para seleccionar el tipo de grupo
     TIPO_GRUPO_CHOICES = (
         ('paciente', 'Paciente'),
         ('secretaria', 'Secretaria'),
@@ -19,8 +18,26 @@ class UsuarioUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "first_name", "last_name", "email", "password1", "password2", "tipo_grupo"]
-        
-        
+
+    def clean_tipo_grupo(self):
+        tipo_grupo = self.cleaned_data['tipo_grupo']
+        # Verificar si el grupo seleccionado es uno de los grupos existentes
+        if tipo_grupo not in ['paciente', 'secretaria', 'medico']:
+            raise forms.ValidationError("El grupo seleccionado no es válido.")
+        return tipo_grupo
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        tipo_grupo = self.cleaned_data.get('tipo_grupo')
+
+        if commit:
+            user.save()
+            # Obtener el grupo existente correspondiente al tipo de grupo seleccionado
+            group = Group.objects.get(name=tipo_grupo.capitalize())  # Asegurar la capitalización correcta
+            user.groups.add(group)
+
+        return user
+
 
 from django.forms.widgets import SelectDateWidget
 
@@ -47,3 +64,5 @@ class PagarReserva (forms.ModelForm):
     class Meta:
         model = Reserva
         fields = ["estado"]
+        
+        

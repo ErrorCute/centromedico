@@ -5,45 +5,25 @@ from django.contrib.auth import authenticate,login
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group 
 from.models import Reserva
-
-
-
-
+from django.contrib.auth import authenticate, login
 
 def form(request):
     if request.method == 'POST':
         formulario = UsuarioUserForm(data=request.POST)
         if formulario.is_valid():
-            usuario = formulario.save(commit=False)
-            usuario.save()
+            usuario = formulario.save()  # Crear el usuario con el formulario
 
-            # Acceder al tipo de grupo seleccionado en el formulario
-            tipo_grupo = formulario.cleaned_data["tipo_grupo"]
-
-            # Asignar el grupo correspondiente al usuario creado
-            if tipo_grupo == 'Paciente':
-                group = Group.objects.get(name='Paciente')
-            elif tipo_grupo == 'Secretaria':
-                group = Group.objects.get(name='Secretaria')
-            elif tipo_grupo == 'Medico':
-                group = Group.objects.get(name='Medico')
-            else:
-                group = None
-
-            if group:
-                group.user_set.add(usuario)
             # Autenticar y loguear al usuario recién creado
             user = authenticate(username=usuario.username, password=formulario.cleaned_data["password1"])
-            login(request, user)
-
-            return redirect('base')  # Redirigir a la página deseada después de guardar el usuario
+            if user is not None:
+                login(request, user)
+                return redirect('base')  # Redirigir a la página deseada después de guardar el usuario
 
     else:
         formulario = UsuarioUserForm()
 
     data = {'form': formulario}
     return render(request, 'registration/form.html', data)
-
 
 
 
@@ -80,7 +60,7 @@ def reserva_exitosa(request):
         reservas = Reserva.objects.all()
     elif request.user.groups.filter(name='Medico').exists():
         # Si el usuario es del grupo 'Medico', mostrar solo las reservas asociadas a ese médico
-        reservas = Reserva.objects.filter(medico__usuario=request.user)
+        reservas = Reserva.objects.all()
     else:
         # Si no es del grupo 'Secretaria' ni 'Medico', mostrar solo las reservas asociadas a ese usuario
         reservas = Reserva.objects.filter(paciente=request.user)
@@ -131,3 +111,5 @@ def realizar_pago(request, reserva_id):
     # Renderizar la plantilla con el formulario apropiado
     return render(request, 'core/realizar_pago.html', {'form': form,'user': request.user})
 
+def formulario_con_calendario(request):
+    return render(request, 'formulario_con_calendario.html')
