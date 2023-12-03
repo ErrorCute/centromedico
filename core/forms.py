@@ -56,6 +56,7 @@ class ReservaForm(forms.ModelForm):
         # Limitar las opciones de hora a partir de las 10:00 hasta las 17:00
         horas_disponibles = [(f'{hora:02d}:00', f'{hora:02d}:00') for hora in range(10, 18)]  # Generar lista de horas disponibles
         self.fields['hora'].widget = forms.Select(choices=horas_disponibles)
+        
 
 
 

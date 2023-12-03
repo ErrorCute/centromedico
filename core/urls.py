@@ -4,6 +4,7 @@ from .views import  base,form,login,reserva,reserva_exitosa,editar_reserva,elimi
 urlpatterns=[
   
     path('',base,name="base"),
+
     path('form/',form, name ="form"),
     path('login',login, name="login"),
     path('reserva/',reserva, name="reserva"),
