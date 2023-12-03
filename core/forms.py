@@ -40,6 +40,8 @@ class UsuarioUserForm(UserCreationForm):
 
 
 from django.forms.widgets import SelectDateWidget
+import requests
+
 
 class ReservaForm(forms.ModelForm):
     class Meta:
@@ -56,6 +58,32 @@ class ReservaForm(forms.ModelForm):
         # Limitar las opciones de hora a partir de las 10:00 hasta las 17:00
         horas_disponibles = [(f'{hora:02d}:00', f'{hora:02d}:00') for hora in range(10, 18)]  # Generar lista de horas disponibles
         self.fields['hora'].widget = forms.Select(choices=horas_disponibles)
+
+        try:
+            response = requests.get('https://api.victorsanmartin.com/feriados/en.json')
+            if response.status_code == 200:
+                feriados_data = response.json().get('data', [])
+                self.feriados = [feriado['date'] for feriado in feriados_data]
+        except requests.exceptions.RequestException as e:
+            print(f"Error de solicitud: {e}")
+            self.feriados = []
+
+    def clean_fecha(self):
+        fecha = self.cleaned_data.get('fecha')
+
+        if fecha.strftime("%Y-%m-%d") in self.feriados:
+            raise forms.ValidationError("Esta fecha es un día feriado. Por favor, selecciona otro día.")
+
+        return fecha
+
+    def clean_hora(self):
+        hora = self.cleaned_data.get('hora')
+        fecha = self.cleaned_data.get('fecha')
+
+        if Reserva.objects.filter(fecha=fecha, hora=hora).exists():
+            raise forms.ValidationError("Ya hay una reserva para esta hora en este día. Por favor, selecciona otra hora.")
+
+        return hora
         
 
 
