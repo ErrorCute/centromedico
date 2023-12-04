@@ -97,20 +97,7 @@
 
  {% endblock %}
 
-<div >
 
-  {% if data %}
-  <h1>Feriados</h1>
-  <ul>
-      {% for feriado in data.data %}
-          <li>{{ feriado.date }} - {{ feriado.title}}</li>
-      {% endfor %}
-  </ul>
-{% else %}
-  <p>Error al obtener los datos de la API.</p>
-{% endif %}
-
-</div>
     
     
     

@@ -6,7 +6,6 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group 
 from.models import Reserva
 from django.contrib.auth import authenticate, login
-import requests
 
 def form(request):
     if request.method == 'POST':
@@ -38,14 +37,9 @@ def form(request):
 # view-source:https://apis.digital.gob.cl/fl/feriados
 
 def base(request):
-    try:
-        response = requests.get('https://api.victorsanmartin.com/feriados/en.jso')
-        data = response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"Error de solicitud: {e}")
-        data = None
 
-    return render(request, 'core/base.html', {'data': data})
+
+    return render(request, 'core/base.html')
 
 
 
